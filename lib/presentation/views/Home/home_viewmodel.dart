@@ -12,22 +12,83 @@ import 'package:weather_app/core/Alerts/notification_manager.dart';
 
 final homeProvider = ChangeNotifierProvider(
   (ref) {
-    return HomePageViewModel(weatherRepository: WeatherRepository());
+    return HomePageViewModel(WeatherRepository());
   },
 );
 
 class HomePageViewModel with ChangeNotifier {
-  final WeatherRepository weatherRepository;
-  Position? _usersLocation;
-  WeatherModel? _weatherModel;
-  List<ThreeHourSegmentsList>? selectedDaysAverage;
-  DateTime? selectedDate = DateTime.now();
-  double? selectedDatesTemperature = 0;
-  HomePageViewModel({required this.weatherRepository});
-  Position? get usersLocation => _usersLocation;
+  final WeatherRepository _weatherRepository;
+  HomePageViewModel(this._weatherRepository);
 
+  Position? _usersLocation;
+  Position? get usersLocation => _usersLocation;
   set usersLocation(Position? value) {
     _usersLocation = value;
+    notifyListeners();
+  }
+
+  WeatherModel? _weatherModel;
+  WeatherModel? get weatherModel => _weatherModel;
+  set weatherModel(WeatherModel? value) {
+    _weatherModel = value;
+    notifyListeners();
+  }
+
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  List<ThreeHourSegmentsList>? selectedDaysAverage;
+
+  DateTime? _selectedDate = DateTime.now();
+  DateTime? get selectedDate => _selectedDate;
+
+  set selectedDate(DateTime? value) {
+    _selectedDate = value;
+    notifyListeners();
+  }
+
+  String? _selectedDateIcon;
+  String? get selectedDateIcon => _selectedDateIcon;
+
+  set selectedDateIcon(String? value) {
+    _selectedDateIcon = value;
+    notifyListeners();
+  }
+
+  String? _selectedDateTitle = "Today";
+  String? get selectedDateTitle => _selectedDateTitle;
+
+  set selectedDateTitle(String? value) {
+    _selectedDateTitle = value;
+    notifyListeners();
+  }
+
+  String? _selectedDateDescription;
+  String? get selectedDateDescription => _selectedDateDescription;
+
+  set selectedDateDescription(String? value) {
+    _selectedDateDescription = value;
+    notifyListeners();
+  }
+
+  int? _onChangedDayIndex = 0;
+  int? get onChangedDayIndex => _onChangedDayIndex;
+
+  set onChangedDayIndex(int? value) {
+    _onChangedDayIndex = value;
+    notifyListeners();
+  }
+
+  double? _selectedDateTemperature = 0;
+  double? get selectedDateTemperature => _selectedDateTemperature;
+
+  set selectedDateTemperature(double? value) {
+    _selectedDateTemperature = value;
     notifyListeners();
   }
 
@@ -64,6 +125,7 @@ class HomePageViewModel with ChangeNotifier {
   // }
 
   Future<void> getUsersPosition() async {
+    _isLoading = true;
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(
@@ -71,6 +133,7 @@ class HomePageViewModel with ChangeNotifier {
         .then((Position position) async {
       await fetchData(position);
       getChosenDaysAverage();
+      _isLoading = false;
       notifyListeners();
     }).catchError((e) {
       debugPrint(e.toString());
@@ -78,7 +141,7 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   Future<void> fetchData(Position position) async {
-    var result = await weatherRepository.getWeatherData(
+    var result = await _weatherRepository.getWeatherData(
         latitude: position.latitude, longitude: position.longitude);
     if (!result.success) {
       NotificationManager.notifyError(result.message);
@@ -88,19 +151,36 @@ class HomePageViewModel with ChangeNotifier {
     log("${_weatherModel?.city?.country}");
   }
 
-  void getChosenDaysAverage() {
-    selectedDaysAverage =
-        _weatherModel?.threeHourSegmentsList?.takeWhile((element) {
-      var temp = DateTime.fromMillisecondsSinceEpoch(element.dt! * 1000);
-      return temp.month == selectedDate?.month && temp.day == selectedDate?.day;
-    }).toList();
-    for (var threeHourSegment in selectedDaysAverage!) {
-      selectedDatesTemperature =
-          selectedDatesTemperature! + threeHourSegment.main!.temp!.toDouble();
+  void getChosenDaysAverage({DateTime? chosenDate}) {
+    _selectedDateTemperature = 0;
+    if (chosenDate != null) {
+      selectedDate = chosenDate;
+      _selectedDateTitle =
+          chosenDate.day != DateTime.now().day ? "Tomorrow" : "Today";
     }
-    selectedDatesTemperature =
-        selectedDatesTemperature! / selectedDaysAverage!.length;
-    log(selectedDatesTemperature!.toStringAsFixed(2));
+
+    ///Get the Time Segments of the required day from the Model
+    selectedDaysAverage =
+        _weatherModel?.threeHourSegmentsList?.where((element) {
+      var temp = DateTime.fromMillisecondsSinceEpoch(element.dt! * 1000);
+      return temp.month == _selectedDate?.month &&
+          temp.day == _selectedDate?.day;
+    }).toList();
+
+    ///Find the average of the temperatures amongst the time segments
+    for (var threeHourSegment in selectedDaysAverage!) {
+      _selectedDateTemperature =
+          _selectedDateTemperature! + threeHourSegment.main!.temp!.toDouble();
+    }
+    log(_selectedDateTemperature.toString());
+    _selectedDateTemperature =
+        _selectedDateTemperature! / selectedDaysAverage!.length;
+    var temp =
+        selectedDaysAverage?[((selectedDaysAverage!.length) / 2).truncate()];
+    _selectedDateDescription = temp?.weather?.first.description;
+    _selectedDateIcon = temp?.weather?.first.icon;
+
+    log(_selectedDateTemperature!.toStringAsFixed(2));
 
     // selectedDatesTemperature = selectedDaysAverage.
     log("${selectedDaysAverage?.length}");
