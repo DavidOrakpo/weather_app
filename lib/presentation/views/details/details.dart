@@ -62,6 +62,7 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
               ),
               ListView.separated(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: provider.daysDetailed!.length,
                 itemBuilder: (context, index) {
                   var item = provider.daysDetailed![index];
@@ -80,16 +81,24 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
                         child: SizedBox(
                           height: 40,
                           width: 40,
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "${ApiKeys.weatherIcon}${item.icon}@2x.png",
-                            placeholder: (context, url) => const SizedBox(),
-                          ),
+                          child: item.icon == null
+                              ? const Icon(
+                                  Icons.clear,
+                                  color: AppColors.black,
+                                )
+                              : CachedNetworkImage(
+                                  imageUrl:
+                                      "${ApiKeys.weatherIcon}${item.icon}@2x.png",
+                                  placeholder: (context, url) =>
+                                      const SizedBox(),
+                                ),
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          "${item.temperature.toStringAsFixed(0)}\u00B0",
+                          item.temperature == null
+                              ? "~"
+                              : "${item.temperature!.toStringAsFixed(0)}\u00B0",
                           style: AppTextStyle.bodyThree.copyWith(
                             color: AppColors.black,
                           ),

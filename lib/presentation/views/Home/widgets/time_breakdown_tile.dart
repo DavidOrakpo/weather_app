@@ -116,88 +116,117 @@ class _TimeBreakDownTileState extends ConsumerState<TimeBreakDownTile> {
                         ),
                       ),
                     )
-                  : ListView.builder(
-                      clipBehavior: Clip.none,
-                      padding: AppSpacings.horizontalPadding,
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          height: 200,
-                          // width: 600,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 25),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: AppColors.containerColor,
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: const Offset(0, 10),
-                                  blurRadius: 20,
-                                  spreadRadius: 5,
-                                  color:
-                                      AppColors.timeTileColor.withOpacity(0.1))
-                            ],
-                          ),
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: provider.selectedDaysAverage!.length,
-                            itemBuilder: (context, index) {
-                              var item = provider.selectedDaysAverage![index];
-                              return Container(
-                                height: 100,
-                                width: 60,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: AppColors.timeTileColor,
+                  : provider.selectedDaysAverage!.isEmpty
+                      ? Padding(
+                          padding: AppSpacings.horizontalPadding,
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: AppColors.containerColor,
+                              boxShadow: [
+                                BoxShadow(
+                                    offset: const Offset(0, 10),
+                                    blurRadius: 20,
+                                    spreadRadius: 5,
+                                    color: AppColors.timeTileColor
+                                        .withOpacity(0.1))
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                "No data to show at this time",
+                                style: AppTextStyle.bodyThree.copyWith(
+                                  color: AppColors.textGray,
                                 ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      Validators.dateTimeToAMString(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                                item.dt! * 1000)
-                                            .toLocal(),
-                                      ),
-                                      style: AppTextStyle.bodyFour.copyWith(
-                                        color: AppColors.gray.shade500,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 40,
-                                      width: 40,
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            "${ApiKeys.weatherIcon}${item.weather?.first.icon}@2x.png",
-                                        placeholder: (context, url) =>
-                                            const SizedBox(),
-                                      ),
-                                    ),
-                                    Text(
-                                      "${item.main?.temp?.toStringAsFixed(0)}\u00B0",
-                                      style: AppTextStyle.bodyFive.copyWith(
-                                        color: AppColors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              width: 15,
+                              ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        )
+                      : ListView.builder(
+                          clipBehavior: Clip.none,
+                          padding: AppSpacings.horizontalPadding,
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 1,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              height: 200,
+                              // width: 600,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 25),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: AppColors.containerColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: const Offset(0, 10),
+                                      blurRadius: 20,
+                                      spreadRadius: 5,
+                                      color: AppColors.timeTileColor
+                                          .withOpacity(0.1))
+                                ],
+                              ),
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: provider.selectedDaysAverage!.length,
+                                itemBuilder: (context, index) {
+                                  var item =
+                                      provider.selectedDaysAverage![index];
+                                  return Container(
+                                    height: 100,
+                                    width: 60,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: AppColors.timeTileColor,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          Validators.dateTimeToAMString(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                    item.dt! * 1000)
+                                                .toLocal(),
+                                          ),
+                                          style: AppTextStyle.bodyFour.copyWith(
+                                            color: AppColors.gray.shade500,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 40,
+                                          width: 40,
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                "${ApiKeys.weatherIcon}${item.weather?.first.icon}@2x.png",
+                                            placeholder: (context, url) =>
+                                                const SizedBox(),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${item.main?.temp?.toStringAsFixed(0)}\u00B0",
+                                          style: AppTextStyle.bodyFive.copyWith(
+                                            color: AppColors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  width: 15,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
             )
           ],
         ),

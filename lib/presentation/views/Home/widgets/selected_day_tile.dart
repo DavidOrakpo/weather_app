@@ -34,43 +34,52 @@ class _SelectedDayTileState extends ConsumerState<SelectedDayTile> {
                   height: 1,
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  provider.isLoading
-                      ? const SizedBox()
-                      : SizedBox(
-                          height: 80,
-                          width: 80,
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "${ApiKeys.weatherIcon}${provider.selectedDateIcon}@2x.png",
-                            placeholder: (context, url) => const SizedBox(),
+              provider.selectedDaysAverage!.isEmpty && !provider.isLoading
+                  ? Image.asset(
+                      "assets/icons/cloudy_load3.png",
+                      height: 60,
+                      width: 100,
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        provider.isLoading
+                            ? const SizedBox()
+                            : SizedBox(
+                                height: 80,
+                                width: 80,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      "${ApiKeys.weatherIcon}${provider.selectedDateIcon}@2x.png",
+                                  placeholder: (context, url) =>
+                                      const SizedBox(),
+                                ),
+                              ),
+                        Text(
+                          provider.isLoading
+                              ? "Getting Ready..."
+                              : "${provider.selectedDateTemperature?.toStringAsFixed(0)}\u00B0",
+                          style: AppTextStyle.headerOne.copyWith(
+                            fontSize: provider.isLoading ? 14 : null,
+                            color: AppColors.white,
                           ),
                         ),
-                  Text(
-                    provider.isLoading
-                        ? "Getting Ready..."
-                        : "${provider.selectedDateTemperature?.toStringAsFixed(0)}\u00B0",
-                    style: AppTextStyle.headerOne.copyWith(
-                      fontSize: provider.isLoading ? 14 : null,
-                      color: AppColors.white,
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              AnimatedOpacity(
-                opacity: provider.isLoading ? 0 : 1,
-                duration: const Duration(seconds: 1),
-                child: Text(
-                  "${provider.selectedDateDescription?.capitalize()}",
-                  style: AppTextStyle.headerFive.copyWith(
-                    color: AppColors.white,
-                  ),
-                ),
-              )
+              provider.selectedDaysAverage!.isEmpty
+                  ? const SizedBox()
+                  : AnimatedOpacity(
+                      opacity: provider.isLoading ? 0 : 1,
+                      duration: const Duration(seconds: 1),
+                      child: Text(
+                        "${provider.selectedDateDescription?.capitalize()}",
+                        style: AppTextStyle.headerFive.copyWith(
+                          color: AppColors.white,
+                        ),
+                      ),
+                    )
             ],
           ),
         ),

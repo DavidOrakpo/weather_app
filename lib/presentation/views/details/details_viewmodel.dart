@@ -30,17 +30,21 @@ class DetailsViewModel with ChangeNotifier {
         return temp.month == day.month && temp.day == day.day;
       }).toList();
 
-      for (var threeHourSegment in timeSegmentPerDay!) {
+      if (timeSegmentPerDay!.isNotEmpty) {
+        for (var threeHourSegment in timeSegmentPerDay) {
+          sumOfDailyTemperatures =
+              sumOfDailyTemperatures + threeHourSegment.main!.temp!.toDouble();
+        }
         sumOfDailyTemperatures =
-            sumOfDailyTemperatures + threeHourSegment.main!.temp!.toDouble();
+            sumOfDailyTemperatures / timeSegmentPerDay.length;
+
+        var temp =
+            timeSegmentPerDay[((timeSegmentPerDay.length) / 2).truncate()];
+        daysDetailed!.add(DetailsModel(
+            day, temp.weather!.first.icon!, sumOfDailyTemperatures));
+      } else {
+        daysDetailed!.add(DetailsModel(day, null, null));
       }
-      sumOfDailyTemperatures =
-          sumOfDailyTemperatures / timeSegmentPerDay.length;
-
-      var temp = timeSegmentPerDay[((timeSegmentPerDay.length) / 2).truncate()];
-
-      daysDetailed!.add(
-          DetailsModel(day, temp.weather!.first.icon!, sumOfDailyTemperatures));
     }
   }
 }

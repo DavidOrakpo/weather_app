@@ -42,7 +42,7 @@ class HomePageViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  List<ThreeHourSegmentsList>? selectedDaysAverage;
+  List<ThreeHourSegmentsList>? selectedDaysAverage = [];
 
   DateTime? _selectedDate = DateTime.now();
   DateTime? get selectedDate => _selectedDate;
@@ -166,6 +166,10 @@ class HomePageViewModel with ChangeNotifier {
       return temp.month == _selectedDate?.month &&
           temp.day == _selectedDate?.day;
     }).toList();
+
+    if (selectedDaysAverage!.isEmpty) {
+      return;
+    }
 
     ///Find the average of the temperatures amongst the time segments
     for (var threeHourSegment in selectedDaysAverage!) {
