@@ -43,36 +43,59 @@ class _HeaderTileState extends ConsumerState<HeaderTile> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(homeProvider);
-    // if (provider.isLoading) {
-    //   timer?.cancel();
-    // }
     return provider.isLoading
-        ? Flexible(
-            child: Center(
-              child: AnimatedScale(
-                scale: animate! ? 2 : 1,
-                duration: const Duration(milliseconds: 650),
-                curve: Curves.easeIn,
-                child: Image.asset(
-                  "assets/icons/cloudy_load3.png",
-                  height: 60,
-                  width: 100,
+        ? !provider.locationServiceEnabled!
+            ? GestureDetector(
+                onTap: () async {
+                  await provider.initialize();
+                },
+                child: const Center(
+                  child: SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Icon(
+                      Icons.refresh,
+                      color: AppColors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
+              )
+            : Flexible(
+                child: Center(
+                  child: AnimatedScale(
+                    scale: animate! ? 2 : 1,
+                    duration: const Duration(milliseconds: 650),
+                    curve: Curves.easeIn,
+                    child: Image.asset(
+                      "assets/icons/cloudy_load3.png",
+                      height: 60,
+                      width: 100,
+                    ),
+                  ),
+                ),
+              )
         : Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: Align(
                   alignment: Alignment.topRight,
-                  child: Icon(
-                    Icons.menu_outlined,
-                    color: AppColors.white,
-                  ),
+                  child: !provider.locationServiceEnabled!
+                      ? GestureDetector(
+                          onTap: () async {
+                            await provider.initialize();
+                          },
+                          child: const Icon(
+                            Icons.refresh,
+                            color: AppColors.white,
+                          ),
+                        )
+                      : const Icon(
+                          Icons.menu_outlined,
+                          color: AppColors.white,
+                        ),
                 ),
               ),
               const SizedBox(

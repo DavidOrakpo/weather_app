@@ -61,6 +61,15 @@ class HomePageViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  bool? _locationServiceEnabled = false;
+
+  /// Whether locations Services are active
+  bool? get locationServiceEnabled => _locationServiceEnabled;
+  set locationServiceEnabled(bool? value) {
+    _locationServiceEnabled = value;
+    notifyListeners();
+  }
+
   String? _selectedDateTitle = "Today";
 
   /// The selected day Title
@@ -101,13 +110,12 @@ class HomePageViewModel with ChangeNotifier {
   ///
   /// Informs the user if location services are active or not.
   Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
     LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
+    locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!locationServiceEnabled!) {
       NotificationManager.notifyError(
-          "Location services are disabled. Please enable the services");
+          "Location services are disabled. Please enable the services and try again");
 
       return false;
     }

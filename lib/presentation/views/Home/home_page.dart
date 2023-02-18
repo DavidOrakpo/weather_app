@@ -58,7 +58,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
+            padding: AppSpacings.verticalPadding,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
