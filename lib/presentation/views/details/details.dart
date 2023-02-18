@@ -32,7 +32,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(detailsProvider);
     return Scaffold(
-      // appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(30.0),
