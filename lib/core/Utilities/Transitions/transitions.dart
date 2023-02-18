@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/// A custom implementation of the [CustomTransitionpage] which enables a Slide
+/// Transition from one page route to another.
 class CustomSlideTransition extends CustomTransitionPage<void> {
   CustomSlideTransition({super.key, required super.child})
       : super(

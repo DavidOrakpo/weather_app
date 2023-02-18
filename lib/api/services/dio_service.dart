@@ -5,12 +5,15 @@ import 'package:weather_app/api/interfaces/network_call_interface.dart';
 import 'package:weather_app/api/keys/api_keys.dart';
 import 'package:weather_app/api/utils/network_response.dart';
 
+/// This class handles direct communication with the API to retrieve data needed by the app
+///
+/// It performs a GET request using [get], encapsulates the response in [_handleResponse], and handles errors in the
+/// [addInterceptors] method
 class DioService extends NetworkApi {
   late Dio _dioClient;
   DioService._initialize() {
     _dioClient = Dio(
       BaseOptions(
-        // baseUrl: ApiKeys.baseUrl,
         headers: {
           Headers.acceptHeader: Headers.jsonContentType,
         },
@@ -22,6 +25,7 @@ class DioService extends NetworkApi {
   static final DioService _instance = DioService._initialize();
   factory DioService() => _instance;
 
+  /// Performs get requests, taking in a url [url], and any needed query parameters [queryParameters]
   @override
   Future<NetworkResponse> get({
     required String url,
@@ -48,22 +52,24 @@ class DioService extends NetworkApi {
     return result;
   }
 
+  /// Wraps the response gotten from the API in the [NetworkResponse] class
   NetworkResponse _handleResponse(Response<dynamic> response) {
-    NetworkResponse _result = NetworkResponse.warning();
+    NetworkResponse result = NetworkResponse.warning();
     final data = response.data;
     if (response.statusCode == 200 || response.statusCode == 201) {
-      _result = NetworkResponse.success(
+      result = NetworkResponse.success(
         message: "success",
         data: data,
       );
     } else {
-      _result.code = response.statusCode!;
-      _result.message = data["message"] ?? "An error occured";
-      _result.data = data;
+      result.code = response.statusCode!;
+      result.message = data["message"] ?? "An error occured";
+      result.data = data;
     }
-    return _result;
+    return result;
   }
 
+  /// Watches for any errors that may result when the end points are called.
   InterceptorsWrapper addInterceptors() {
     var interceptor = InterceptorsWrapper(onError: (e, handler) async {
       switch (e.type) {
@@ -74,12 +80,6 @@ class DioService extends NetworkApi {
           log("The error is connectTimeout. Message is ${e.message}");
           break;
         case DioErrorType.badResponse:
-          // log("The error is response. Message is ${e.message} ");
-          // log("The error is response. Response is ${e.response} ");
-          // log("The error is response. Message is ${e.response?.statusCode} ");
-          // if (e.response?.statusCode == 502) {
-          //   log("502 error from interceptor");
-          // }
           break;
         case DioErrorType.cancel:
           log("The error is cancel. Message is ${e.message}");

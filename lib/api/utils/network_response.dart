@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+///  A Bridge class that encapsulates the response [data] gotten from a service class.
+///
+/// It provides provides a message property [message], giving more information on the data.
+/// It provides a boolean [success], informing the state of the service call.
+/// It provides the status code [code] of the response receieved.
 class NetworkResponse {
   String message;
   bool success;
@@ -15,12 +20,15 @@ class NetworkResponse {
     this.code = 500,
   });
 
+  /// Named Constructor of a succesful network response
   NetworkResponse.success({
     this.message = "Operation Successful",
     this.data,
     this.success = true,
     this.code = 200,
   });
+
+  /// Named Constructor of an unknown network response
   NetworkResponse.warning({
     this.message = 'An unknown response received.',
     this.data,
@@ -28,27 +36,11 @@ class NetworkResponse {
     this.code = 400,
   });
 
+  /// Named Constructor of an erroneuos network response
   NetworkResponse.error({
     this.message = 'An error occur, try again later.',
     this.data,
     this.success = false,
     this.code = 500,
   });
-
-  handleError(error, trace) {
-    message = error.message.toString();
-    debugPrintStack(stackTrace: trace);
-    debugPrint(error?.toString());
-    if (error is SocketException) {
-      if (error.osError!.errorCode == 8) {
-        message = 'Please check your internet connection.';
-      } else if (error.osError!.errorCode == 61 ||
-          error.osError!.errorCode == 111) {
-        message = 'The server could not be reached, please try again later.';
-      } else {
-        message =
-            'A network error prevented us from reaching the server, please try again later.';
-      }
-    }
-  }
 }

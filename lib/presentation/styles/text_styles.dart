@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Text Styles to be used within the App
 class AppTextStyle {
   static TextStyle get headerOne => const TextStyle(
       fontWeight: FontWeight.w700, fontSize: 42, height: 71 / 42);

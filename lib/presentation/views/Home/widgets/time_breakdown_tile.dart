@@ -116,7 +116,7 @@ class _TimeBreakDownTileState extends ConsumerState<TimeBreakDownTile> {
                         ),
                       ),
                     )
-                  : provider.selectedDaysAverage!.isEmpty
+                  : provider.threeHourSegmentsDayList!.isEmpty
                       ? Padding(
                           padding: AppSpacings.horizontalPadding,
                           child: Container(
@@ -170,10 +170,11 @@ class _TimeBreakDownTileState extends ConsumerState<TimeBreakDownTile> {
                               child: ListView.separated(
                                 shrinkWrap: true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: provider.selectedDaysAverage!.length,
+                                itemCount:
+                                    provider.threeHourSegmentsDayList!.length,
                                 itemBuilder: (context, index) {
                                   var item =
-                                      provider.selectedDaysAverage![index];
+                                      provider.threeHourSegmentsDayList![index];
                                   return Container(
                                     height: 100,
                                     width: 60,

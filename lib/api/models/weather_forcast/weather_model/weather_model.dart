@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'city.dart';
 import 'three_hour_segments_list.dart';
 
+/// A model class to encapsulate data retrieved from the API endpoint: [ApiKeys.weatherDetails]
 class WeatherModel {
   String? cod;
   int? message;

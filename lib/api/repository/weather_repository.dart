@@ -5,8 +5,14 @@ import 'package:weather_app/api/models/weather_forcast/weather_model/weather_mod
 import 'package:weather_app/api/services/dio_service.dart';
 import 'package:weather_app/api/utils/network_response.dart';
 
+/// A repository class that handles fetching the weather details from the service class [DioService]
+///
+/// It implements [WeatherInterface] to retrieve the signature needed to function
 class WeatherRepository implements WeatherInterface {
+  /// The instance of the DioService class singleton
   final NetworkApi _service = DioService();
+
+  /// Retrieves weather data from the service class [_service]
   @override
   Future<NetworkResponse> getWeatherData({
     required double latitude,

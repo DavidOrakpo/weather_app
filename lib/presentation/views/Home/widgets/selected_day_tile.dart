@@ -34,7 +34,7 @@ class _SelectedDayTileState extends ConsumerState<SelectedDayTile> {
                   height: 1,
                 ),
               ),
-              provider.selectedDaysAverage!.isEmpty && !provider.isLoading
+              provider.threeHourSegmentsDayList!.isEmpty && !provider.isLoading
                   ? Image.asset(
                       "assets/icons/cloudy_load3.png",
                       height: 60,
@@ -68,7 +68,7 @@ class _SelectedDayTileState extends ConsumerState<SelectedDayTile> {
                         ),
                       ],
                     ),
-              provider.selectedDaysAverage!.isEmpty
+              provider.threeHourSegmentsDayList!.isEmpty
                   ? const SizedBox()
                   : AnimatedOpacity(
                       opacity: provider.isLoading ? 0 : 1,

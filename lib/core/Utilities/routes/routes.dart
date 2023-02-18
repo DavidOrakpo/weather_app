@@ -5,14 +5,19 @@ import 'package:weather_app/core/Utilities/Transitions/transitions.dart';
 import 'package:weather_app/presentation/views/Home/home_page.dart';
 import 'package:weather_app/presentation/views/details/details.dart';
 
+/// Manages the routing of pages within the app using [GoRouter]
 class AppRoutes {
   AppRoutes._internal();
-  static final AppRoutes instance = AppRoutes._internal();
+  static final AppRoutes _instance = AppRoutes._internal();
   factory AppRoutes() {
-    return instance;
+    return _instance;
   }
+
+  /// The routing object that contains the list of routes for navigation.
+  ///
+  /// It is assigned a navigator Key [AppNavigator().navKey] to retrieve the current Build Context.
   final GoRouter router = GoRouter(
-    navigatorKey: AppNavigator.instance.navKey,
+    navigatorKey: AppNavigator().navKey,
     routes: [
       GoRoute(
         path: "/",

@@ -25,15 +25,15 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
-    fetchData();
+    _fetchData();
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //   await ref.read(homeProvider).getUsersPosition();
+    //   await ref.read(homeProvider).initialize();
     // });
     super.initState();
   }
 
-  Future<void> fetchData() async {
-    await ref.read(homeProvider).getUsersPosition();
+  Future<void> _fetchData() async {
+    await ref.read(homeProvider).initialize();
   }
 
   @override
