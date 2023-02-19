@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:weather_app/api/interfaces/network_call_interface.dart';
 import 'package:weather_app/api/utils/network_response.dart';
@@ -42,6 +43,7 @@ class DioService extends NetworkApi {
           result.message =
               e.response!.data["message"] ?? e.response!.statusMessage!;
           break;
+
         default:
       }
     } finally {
@@ -84,6 +86,11 @@ class DioService extends NetworkApi {
           break;
         case DioErrorType.sendTimeout:
           log("The error is send. Message is ${e.message}");
+          break;
+        case DioErrorType.unknown:
+          if (e.error is SocketException) {
+            log("Socket Exception");
+          }
           break;
 
         default:
