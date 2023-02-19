@@ -43,17 +43,25 @@ class _HeaderTileState extends ConsumerState<HeaderTile> {
     var provider = ref.watch(homeProvider);
     return provider.isLoading
         ? !provider.locationServiceEnabled!
-            ? GestureDetector(
-                onTap: () async {
-                  await provider.initialize();
-                },
-                child: const Center(
-                  child: SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Icon(
-                      Icons.refresh,
-                      color: AppColors.white,
+            ? Center(
+                child: SizedBox(
+                  child: GestureDetector(
+                    onTap: () async {
+                      await provider.initialize();
+                    },
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.primaryGradient3.withOpacity(0.5),
+                      ),
+                      child: GestureDetector(
+                        child: const Icon(
+                          Icons.refresh,
+                          color: AppColors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
