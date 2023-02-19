@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:weather_app/core/Utilities/Validators/validator.dart';
 import 'package:weather_app/presentation/styles/app_colors.dart';
 import 'package:weather_app/presentation/styles/spacing.dart';

@@ -1,8 +1,6 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:weather_app/api/interfaces/network_call_interface.dart';
-import 'package:weather_app/api/keys/api_keys.dart';
 import 'package:weather_app/api/utils/network_response.dart';
 
 /// This class handles direct communication with the API to retrieve data needed by the app

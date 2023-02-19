@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-
 ///  A Bridge class that encapsulates the response [data] gotten from a service class.
 ///
 /// It provides provides a message property [message], giving more information on the data.

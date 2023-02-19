@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/api/models/weather_forcast/weather_model/three_hour_segments_list.dart';
 import 'package:weather_app/api/models/weather_forcast/weather_model/weather_model.dart';
 import 'package:weather_app/api/repository/weather_repository.dart';
-import 'package:weather_app/core/Alerts/context.dart';
 import 'package:weather_app/core/Alerts/notification_manager.dart';
 
 final repositoryProvider = Provider(
