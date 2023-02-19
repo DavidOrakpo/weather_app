@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,7 +5,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:weather_app/api/models/weather_forcast/weather_model/city.dart';
 import 'package:weather_app/api/models/weather_forcast/weather_model/weather_model.dart';
 import 'package:weather_app/api/repository/weather_repository.dart';
-import 'package:weather_app/api/services/dio_service.dart';
 import 'package:weather_app/api/utils/network_response.dart';
 import 'package:weather_app/presentation/views/Home/home_viewmodel.dart';
 

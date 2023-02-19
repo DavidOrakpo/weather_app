@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// A concise representation of values needed to generate the Details Page
 class DetailsModel {
   /// The day of the week

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// A store of API keys and API end point Urls to be used in the app
 class ApiKeys {
   static const String baseUrl = "https://api.openweathermap.org/data/2.5";

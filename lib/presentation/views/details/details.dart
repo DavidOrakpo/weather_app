@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:weather_app/api/keys/api_keys.dart';
-import 'package:weather_app/api/models/weather_forcast/weather_model/main.dart';
 import 'package:weather_app/api/models/weather_forcast/weather_model/weather_model.dart';
 import 'package:weather_app/core/Utilities/Validators/validator.dart';
 import 'package:weather_app/presentation/styles/app_colors.dart';
