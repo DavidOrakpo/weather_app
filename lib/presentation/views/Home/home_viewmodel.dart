@@ -10,9 +10,13 @@ import 'package:weather_app/api/repository/weather_repository.dart';
 import 'package:weather_app/core/Alerts/context.dart';
 import 'package:weather_app/core/Alerts/notification_manager.dart';
 
+final repositoryProvider = Provider(
+  (ref) => WeatherRepository(),
+);
+
 final homeProvider = ChangeNotifierProvider(
   (ref) {
-    return HomePageViewModel(WeatherRepository());
+    return HomePageViewModel(ref.read(repositoryProvider));
   },
 );
 
@@ -138,7 +142,8 @@ class HomePageViewModel with ChangeNotifier {
   /// Performs initial setup and proceeds to make the API calls
   ///
   /// Checks if [_handleLocationPermission] is successful,
-  /// proceeds to get the users location, then retrieves weather data from [_fetchData]
+  /// proceeds to get the users location, then retrieves weather data from [fetchData]
+  /// Calls [getChosenDaysAverage] to populate the selected day properties
   Future<void> initialize() async {
     _isLoading = true;
     final hasPermission = await _handleLocationPermission();
@@ -146,7 +151,7 @@ class HomePageViewModel with ChangeNotifier {
     await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.medium)
         .then((Position position) async {
-      await _fetchData(position);
+      await fetchData(position);
       getChosenDaysAverage();
       _isLoading = false;
       notifyListeners();
@@ -156,15 +161,14 @@ class HomePageViewModel with ChangeNotifier {
   }
 
   /// Retrieves Weather information from the [_weatherRepository.getWeatherData]
-  Future<void> _fetchData(Position position) async {
+  Future<void> fetchData(Position position) async {
     var result = await _weatherRepository.getWeatherData(
         latitude: position.latitude, longitude: position.longitude);
     if (!result.success) {
       NotificationManager.notifyError(result.message);
       return;
     }
-    _weatherModel = result.data as WeatherModel;
-    log("${_weatherModel?.city?.country}");
+    weatherModel = result.data as WeatherModel;
   }
 
   /// Computes the average temperature of the users selected date: [selectedDate]
@@ -178,7 +182,7 @@ class HomePageViewModel with ChangeNotifier {
 
     //Get the Time Segments of the required day from the Model
     threeHourSegmentsDayList =
-        _weatherModel?.threeHourSegmentsList?.where((element) {
+        weatherModel?.threeHourSegmentsList?.where((element) {
       var temp = DateTime.fromMillisecondsSinceEpoch(element.dt! * 1000);
       return temp.month == _selectedDate?.month &&
           temp.day == _selectedDate?.day;
